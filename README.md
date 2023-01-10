@@ -18,7 +18,7 @@ atm, `/` should take you to something that vaguely looks like Twitter homepage. 
 
 Assuming you're not logged in, the right hand side will have a poorly designed component with some text directing you to log in. This should take you to a login/create account page - make an account however you like (probs buggy) - its all handled by a package so i cant see any login info.
 
-To go to a user's page, you just need the url to be `.../username`. Hopefully, it should show you tweets made by that account, as well as look different depending on if its the current users page or not (follow etc. if someone else, edit profile if yours). Editing is very wip but in general should work, it just loses track of tweets made if username changes...
+To go to a user's page, you just need the url to be `.../profile/username`. Hopefully, it should show you tweets made by that account, as well as look different depending on if its the current users page or not (follow etc. if someone else, edit profile if yours). Editing is very wip but in general should work, it just loses track of tweets made if username changes...
 
 lmk abt any bugs etc. you find along the way xx
 

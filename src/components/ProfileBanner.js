@@ -4,15 +4,25 @@ import { db, auth } from "../firebase";
 import {
   doc,
   getDoc,
+  setDoc,
   getDocs,
   query,
   collection,
   where,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { Avatar, Button } from "@mui/material";
-import { Add, AttachMoney, Cancel, ModeEdit } from "@mui/icons-material";
+import {
+  Add,
+  AttachMoney,
+  Cancel,
+  ModeEdit,
+  PortableWifiOff,
+  UnfoldLessTwoTone,
+} from "@mui/icons-material";
 import { useAuthState } from "react-firebase-hooks/auth";
+import EditProfile from "./EditProfile";
 
 function ProfileBanner() {
   const [profileInfo, setProfileInfo] = useState("");
@@ -39,21 +49,62 @@ function ProfileBanner() {
         collection(db, "users"),
         where("username", "==", username)
       );
-      const doc = await getDocs(q);
-      setProfileInfo(doc.docs[0].data());
+      const profileDoc = await getDocs(q);
+      setProfileInfo(profileDoc.docs[0].data());
+
+      if (profileDoc.docs[0].exists()) {
+        const followingID = user.uid + "_" + profileInfo.uid;
+        const ref = doc(db, "following", followingID);
+        const docSnap = await getDoc(ref);
+        if (docSnap.exists()) {
+          setFollowed(true);
+          setSubscribed(docSnap.data().subscribed);
+        }
+      }
     } catch (err) {
       console.log("No such document for username:" + username);
+      console.log(err);
+      console.log(err.message);
     }
   };
 
+  /// Follow/unfollow stuff
+  // Follow/unfollow - unfollowing will also unscubscribe
+  // subscribe/unsubscribe just updates field in following document
   const clickFollow = async (e) => {
     e.preventDefault();
+    if (!followed) {
+      await follow(false);
+    } else {
+      await unFollow();
+      setSubscribed(false);
+    }
     setFollowed(!followed);
   };
 
   const clickSubscribe = async (e) => {
     e.preventDefault();
+    if (!subscribed) {
+      await follow(true);
+    } else {
+      await follow(false);
+    }
     setSubscribed(!subscribed);
+  };
+
+  // Add numFollower increment
+  const follow = async (subscribing) => {
+    const followID = user.uid + "_" + profileInfo.uid;
+    await setDoc(doc(db, "following", followID), {
+      followedUID: profileInfo.uid,
+      followingUID: user.uid,
+      subscribed: subscribing,
+    });
+  };
+
+  const unFollow = async () => {
+    const followID = user.uid + "_" + profileInfo.uid;
+    await deleteDoc(doc(db, "following", followID));
   };
 
   const clickEdit = async (e) => {
@@ -67,7 +118,8 @@ function ProfileBanner() {
     setEditing(!editing);
   };
 
-  const register = async (e) => {
+  // This is very WIP
+  const makeEdit = async (e) => {
     try {
       const docRef = doc(db, "users", user.uid);
       await updateDoc(docRef, {
@@ -174,8 +226,8 @@ function ProfileBanner() {
               onChange={(e) => setAvatar(e.target.value)}
               placeholder="Avatar URL"
             />
-            <button className="register__btn" onClick={register}>
-              Register
+            <button className="register__btn" onClick={makeEdit}>
+              Edit
             </button>
           </div>
         </div>

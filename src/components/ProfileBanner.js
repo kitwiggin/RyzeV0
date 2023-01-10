@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "../firebase";
 import {
   doc,
@@ -8,6 +8,7 @@ import {
   query,
   collection,
   where,
+  updateDoc,
 } from "firebase/firestore";
 import { Avatar, Button } from "@mui/material";
 import { Add, AttachMoney, Cancel, ModeEdit } from "@mui/icons-material";
@@ -19,7 +20,11 @@ function ProfileBanner() {
   const [subscribed, setSubscribed] = useState(false);
   const [editing, setEditing] = useState(false);
   const { username } = useParams();
+  const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
+  const [name, setName] = useState(profileInfo.name);
+  const [currUsername, setCurrUsername] = useState(username);
+  const [avatar, setAvatar] = useState(profileInfo.avatar);
 
   useEffect(() => {
     if (loading) return;
@@ -53,10 +58,36 @@ function ProfileBanner() {
 
   const clickEdit = async (e) => {
     e.preventDefault();
+    // Set name and avatar equal to profileInfo here so it only happens once
+    // when edit is clicked
+    if (!editing) {
+      setName(profileInfo.name);
+      setAvatar(profileInfo.avatar);
+    }
     setEditing(!editing);
   };
 
-  // Why do the logged out follow/sub buttons briefly show up...?
+  const register = async (e) => {
+    try {
+      const docRef = doc(db, "users", user.uid);
+      await updateDoc(docRef, {
+        name: name,
+        username: currUsername,
+        avatar: avatar,
+      });
+      if (currUsername != username)
+        navigate("/profile/" + currUsername, { replace: true });
+    } catch (err) {
+      console.error(err);
+      alert("An error occured while updating user data");
+    }
+    // Close editing container
+    setEditing(false);
+  };
+
+  // Why do the 'different user' follow/sub buttons briefly show up
+  // when viewing logged in profile...?
+  // This is definitely not secure enough to stop someone editing someone else's profile...
   return (
     <div className="profileBanner">
       <div className="profileInfo">
@@ -83,7 +114,7 @@ function ProfileBanner() {
                   variant="outlined"
                   endIcon={<ModeEdit />}
                 >
-                  Edit Profile
+                  {editing ? "Close editing" : "Edit Profile"}
                 </Button>
               </form>
             </div>
@@ -113,11 +144,40 @@ function ProfileBanner() {
           )}
         </div>
       ) : (
-        <h3>Log in to see user info</h3>
+        <h3>Log in to see user profile info</h3>
       )}
       {editing ? (
         <div className="profile_editing">
           Editing Profile TODO: copy register_container... separate component?
+          <div className="register__container">
+            Full name:
+            <input
+              type="text"
+              className="register__textBox"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Full Name"
+            />
+            Username:
+            <input
+              type="text"
+              className="register__textBox"
+              value={currUsername}
+              onChange={(e) => setCurrUsername(e.target.value)}
+              placeholder="Username"
+            />
+            Avatar:
+            <input
+              type="text"
+              className="register__textBox"
+              value={avatar}
+              onChange={(e) => setAvatar(e.target.value)}
+              placeholder="Avatar URL"
+            />
+            <button className="register__btn" onClick={register}>
+              Register
+            </button>
+          </div>
         </div>
       ) : (
         <></>

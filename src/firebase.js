@@ -7,6 +7,8 @@ import {
   collection,
   where,
   addDoc,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import {
   GoogleAuthProvider,
@@ -84,7 +86,16 @@ const registerWithEmailAndPassword = async (
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addDoc(collection(db, "users"), {
+    // await addDoc(collection(db, "users"), {
+    //   uid: user.uid,
+    //   name,
+    //   username,
+    //   avatar,
+    //   authProvider: "local",
+    //   email,
+    //   verified: false,
+    // });
+    await setDoc(doc(db, "users", user.uid), {
       uid: user.uid,
       name,
       username,

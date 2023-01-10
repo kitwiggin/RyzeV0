@@ -10,6 +10,8 @@ import {
 import { Link } from "react-router-dom";
 import "../style/Post.css";
 
+// Posts are static and don't update avatar etc. when user
+// updates their info :(
 function Post({ displayName, username, verified, text, image, avatar }) {
   return (
     <div className="post">

@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { auth, db, logout } from "../firebase";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import {
+  query,
+  collection,
+  getDocs,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { Avatar } from "@mui/material";
 
 function UserInfo() {
@@ -12,12 +19,15 @@ function UserInfo() {
   const fetchUserData = async () => {
     if (user) {
       try {
-        const q = query(collection(db, "users"), where("uid", "==", user.uid));
-        const doc = await getDocs(q);
-        setUserData(doc.docs[0].data());
+        // const q = query(collection(db, "users"), where("uid", "==", user.uid));
+        // const doc = await getDocs(q);
+        // setUserData(doc.docs[0].data());
+        const ref = doc(db, "users", user.uid);
+        const docSnap = await getDoc(ref);
+        setUserData(docSnap.data());
       } catch (err) {
         console.error(err);
-        alert("An error occured while fetching user data");
+        alert("An error occured while fetching USERINFO user data");
       }
     }
   };

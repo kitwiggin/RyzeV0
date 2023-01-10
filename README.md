@@ -1,3 +1,27 @@
+# For Alex
+
+### Install
+
+Assuming you have NPM installed and running, should be relatively straightforward
+
+Start by doing a `npm install`
+
+### Running
+
+Again, a simple `npm start` should do it - any issues might have to do with local access restrictions on your laptop and/or incorrect installation of packages
+
+From there, `localhost:3000` should work (and probably auto-open in default browser)
+
+### Using site
+
+atm, `/` should take you to something that vaguely looks like Twitter homepage. Menu bar on the left (doesn't work), centre piece is feed with some bollocks ones I've made and a tweetbox at the top to make a tweet.
+
+Assuming you're not logged in, the right hand side will have a poorly designed component with some text directing you to log in. This should take you to a login/create account page - make an account however you like (probs buggy) - its all handled by a package so i cant see any login info.
+
+To go to a user's page, you just need the url to be `.../username`. Hopefully, it should show you tweets made by that account, as well as look different depending on if its the current users page or not (follow etc. if someone else, edit profile if yours). Editing is very wip but in general should work, it just loses track of tweets made if username changes...
+
+lmk abt any bugs etc. you find along the way xx
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

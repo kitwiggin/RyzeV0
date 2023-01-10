@@ -5,6 +5,7 @@ import Post from "./Post";
 import { db } from "../firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 
+// Should keep posts from the same user even if they change their username
 function ProfileFeed() {
   const [posts, setPosts] = useState([]);
   const { username } = useParams();

@@ -23,6 +23,7 @@ function EditProfile({ profileInfo }) {
 
   // This is very WIP
   const makeEdit = async (e) => {
+    console.log("make edit reached");
     try {
       const docRef = doc(db, "users", profileInfo.uid);
       await updateDoc(docRef, {
@@ -67,7 +68,7 @@ function EditProfile({ profileInfo }) {
           placeholder="Avatar URL"
         />
         <button className="register__btn" onClick={makeEdit}>
-          Edit
+          Edity
         </button>
       </div>
     </div>

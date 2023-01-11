@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "../firebase";
 import {
@@ -11,6 +11,7 @@ import {
   where,
   updateDoc,
   deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { Avatar, Button } from "@mui/material";
 import {
@@ -20,9 +21,11 @@ import {
   ModeEdit,
   PortableWifiOff,
   UnfoldLessTwoTone,
+  Close,
 } from "@mui/icons-material";
 import { useAuthState } from "react-firebase-hooks/auth";
 import EditProfile from "./EditProfile";
+import "../style/ProfileBanner.css";
 
 function ProfileBanner() {
   const [profileInfo, setProfileInfo] = useState("");
@@ -32,17 +35,37 @@ function ProfileBanner() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
-  const [name, setName] = useState(profileInfo.name);
+  const [name, setName] = useState("");
   const [currUsername, setCurrUsername] = useState(username);
-  const [avatar, setAvatar] = useState(profileInfo.avatar);
+  const [avatar, setAvatar] = useState("");
+  const [following, setFollowing] = useState([]);
+  const [follows, setFollows] = useState([]);
+  const [showFollowers, setShowFollowers] = useState(false);
 
   useEffect(() => {
     if (loading) return;
     // if (!user) return navigate("/login");
-    // fetchUserData();
     fetchProfile();
-  }, [profileInfo, user, loading]);
 
+    // const fetchData = async () => {
+    //   await fetchProfile();
+    //   await fetchFollowerInfo();
+    // };
+
+    // try {
+    //   fetchData();
+    // } catch (err) {
+    //   console.log("error with fetch data in profileBanner useEffect");
+    //   console.log(err);
+    // }
+
+    // fetchProfile().then(fetchFollowerInfo());
+
+    /// Feel like useCallback around fetchProfile and including it in here might be something to explore
+    // }, [fetchProfile, user, loading]);
+  }, [user, loading]);
+
+  // const fetchProfile = useCallback(async () => {
   const fetchProfile = async () => {
     try {
       const q = query(
@@ -65,6 +88,28 @@ function ProfileBanner() {
       console.log("No such document for username:" + username);
       console.log(err);
       console.log(err.message);
+    }
+    // }, []);
+  };
+
+  const fetchFollowerInfo = async () => {
+    console.log("insdie fetch follower");
+    console.log(profileInfo);
+    if (profileInfo) {
+      console.log("inside fetch follower w/ profilinf");
+      try {
+        const qFollowing = query(
+          collection(db, "following"),
+          where("followingUID", "==", profileInfo.uid)
+        );
+        onSnapshot(qFollowing, (snapshot) => {
+          setFollowing(snapshot.docs.map((doc) => doc.data().followedUID));
+        });
+      } catch (err) {
+        console.log("Trouble getting the followerInfo for" + username);
+        console.log(err);
+        console.log(err.message);
+      }
     }
   };
 
@@ -108,6 +153,7 @@ function ProfileBanner() {
   };
 
   const clickEdit = async (e) => {
+    // what does this actually do?
     e.preventDefault();
     // Set name and avatar equal to profileInfo here so it only happens once
     // when edit is clicked
@@ -141,19 +187,38 @@ function ProfileBanner() {
   // when viewing logged in profile...?
   // This is definitely not secure enough to stop someone editing someone else's profile...
   return (
-    <div className="profileBanner">
-      <div className="profileInfo">
-        <div className="profileAvatar">
-          <Avatar src={profileInfo.avatar} />
+    <div className="ProfileBanner">
+      <div className="profile-info">
+        <div className="avatar-name">
+          <Avatar src={profileInfo.avatar} className="large-avatar" />
+          <div className="name">
+            <h2>{profileInfo.name}</h2>
+          </div>
         </div>
-        <div className="profileHeader">
-          <h3>{profileInfo.name}</h3>
-        </div>
-        <div className="followInfo">
-          <span>Followers: {profileInfo.numFollowers}</span>
-          <span>Following: {profileInfo.numFollowing}</span>
+        <div
+          className="follow-info"
+          onClick={() => setShowFollowers(!showFollowers)}
+        >
+          <h4>Followers: placeholder</h4>
+          <h4>Following: placeholderfollowing</h4>
         </div>
       </div>
+      {showFollowers && (
+        <div className="followers-popup">
+          <div className="close-btn">
+            <button onClick={() => setShowFollowers(false)}>
+              <Close />
+            </button>
+          </div>
+          <ul>
+            {["kev", "steve", "bob", "emily", "nick", "jolene"].map(
+              (follower) => (
+                <li key={follower}>{follower}</li>
+              )
+            )}
+          </ul>
+        </div>
+      )}
       {user ? (
         <div className="profileInfo_logged">
           {profileInfo && profileInfo.uid == user.uid ? (
@@ -234,6 +299,7 @@ function ProfileBanner() {
       ) : (
         <></>
       )}
+      {/* {editing ? <EditProfile profileInfo={profileInfo} /> : <></>} */}
     </div>
   );
 }

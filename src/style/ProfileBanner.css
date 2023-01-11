@@ -1,0 +1,89 @@
+.ProfileBanner {
+    width: 100%;
+    padding: 20px;
+    background-color: #f5f5f5; /* Add a light gray background color */
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    text-align:left;
+}
+
+.profile-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+    background-color: #fff; /* Add a white background color for contrast */
+}
+
+.avatar-name {
+    display: flex;
+    align-items: center;
+    width:100%;
+    margin-bottom:20px;
+}
+
+.large-avatar {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right:10px;
+}
+
+.name h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+    width:100%;
+    text-align:left;
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+.follow-info h4 {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #777;
+    text-align: left;
+}
+
+  
+  .followers-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .followers-popup ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    overflow-y: scroll;
+  }
+  
+  .followers-popup ul li {
+    margin: 5px 0;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .close-btn{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    }

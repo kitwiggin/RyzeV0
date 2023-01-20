@@ -44,9 +44,6 @@ function Profile() {
 
   return (
     <div className="profile">
-      <div className="profile__header">
-        <h2>Profile!</h2>
-      </div>
       <ProfileBanner />
       <ProfileFeed />
     </div>

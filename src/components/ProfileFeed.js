@@ -28,7 +28,6 @@ function ProfileFeed() {
 
   return (
     <div className="feed">
-      <div className="feed__header" />
       {posts.map((post) => (
         <Post
           key={post.id}

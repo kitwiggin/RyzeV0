@@ -52,6 +52,7 @@
     margin: 10px 0;
     color: #777;
     text-align: left;
+    cursor: pointer;
 }
 
   
@@ -86,4 +87,5 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    cursor: pointer;
     }

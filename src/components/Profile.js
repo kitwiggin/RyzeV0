@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../style/Feed.css";
 import ProfileFeed from "./ProfileFeed";
 import ProfileBanner from "./ProfileBanner";
+import HeaderBar from "./HeaderBar";
 import { db, auth } from "../firebase";
 import {
   collection,
@@ -44,6 +45,7 @@ function Profile() {
 
   return (
     <div className="profile">
+      <HeaderBar />
       <ProfileBanner />
       <ProfileFeed />
     </div>

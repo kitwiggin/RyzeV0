@@ -11,14 +11,17 @@
   .sidebar {
     border-right: 1px solid var(--twitter-color);
     flex: 0.25;
-    min-width: 250px;
+    /* min-width: fit-content; */
+    min-width: 200px;
+  max-width: 20%;
+  overflow-x: scroll;
     padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
   }
   .sidebar__twitterIcon {
     color: var(--twitter-color);
-    font-size: 30px !important;
+    font-size: 30px;
     margin-left: 20px;
     margin-bottom: 20px;
   }

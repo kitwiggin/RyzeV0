@@ -7,13 +7,32 @@
   --twitter-background: #e6ecf0;
 }
 .app {
-  display: flex;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-areas:
+    "header header header"
+    "sidebar feed widgets";
   height: 100vh;
   max-width: 1300px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 10px;
 }
+
+.headerbar {
+  grid-area: header;
+}
+.sidebar {
+  grid-area: sidebar;
+}
+.feed {
+  grid-area: feed;
+}
+.userinfo {
+  grid-area: widgets;
+}
+
 .App {
   text-align: center;
 }
@@ -29,7 +48,7 @@
   }
 }
 
-.App-header {
+/* .App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -38,7 +57,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
 .App-link {
   color: #61dafb;

@@ -3,6 +3,7 @@
     border-right: var(--twitter-background) 1px solid;
     min-width: fit-content;
     overflow-y: scroll;
+    overflow-x: scroll;
   }
   .feed__header {
     position: sticky;

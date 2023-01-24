@@ -4,6 +4,7 @@ import Feed from "./components/Feed";
 import Sidebar from "./components/Sidebar";
 import Widgets from "./components/Widgets";
 import UserInfo from "./components/UserInfo";
+import HeaderBar from "./components/HeaderBar";
 // rfce
 // Links:
 // Firebase data structures
@@ -11,11 +12,26 @@ import UserInfo from "./components/UserInfo";
 /// https://stackoverflow.com/questions/46979375/how-to-structure-a-feed-and-follow-system/52153332#52153332
 function App() {
   return (
+    // <div className="app">
+    //   <HeaderBar />
+    //   <Sidebar />
+    //   <Feed />
+    //   {/* <Widgets /> */}
+    //   <UserInfo />
+    // </div>
     <div className="app">
-      <Sidebar />
-      <Feed />
-      <Widgets />
-      <UserInfo />
+      <div style={{ gridArea: "header" }}>
+        <HeaderBar />
+      </div>
+      <div style={{ gridArea: "sidebar" }}>
+        <Sidebar />
+      </div>
+      <div style={{ gridArea: "feed" }}>
+        <Feed />
+      </div>
+      <div style={{ gridArea: "widgets" }}>
+        <Widgets />
+      </div>
     </div>
   );
 }

@@ -1,24 +1,38 @@
 import React, { useState, useEffect } from "react";
 import "../style/HeaderBar.css";
 import { Link } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db, logout } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import SearchBar from "./SearchBar";
 
 // Full of placeholders for now - just been putting it together
 function HeaderBar() {
-  const [searchValue, setSearchValue] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+  const [userData, setUserData] = useState("");
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
-    console.log(showMenu);
-  }, [showMenu]);
+    if (loading) return;
+    fetchUserData();
+  }, [user, loading]);
 
-  function handleSearch(event) {
-    event.preventDefault();
-    console.log(searchValue);
-  }
+  const fetchUserData = async () => {
+    if (user) {
+      try {
+        const ref = doc(db, "users", user.uid);
+        const docSnap = await getDoc(ref);
+        setUserData(docSnap.data());
+      } catch (err) {
+        console.error(err);
+        alert("An error occured while fetching USERINFO user data");
+      }
+    }
+  };
 
+  // Ideally, I would like the dropdown menu to dissapear when anywhere is clicked
   return (
     <div className="navbar">
       <Link to="/">
@@ -31,48 +45,52 @@ function HeaderBar() {
       <Link to="/" className="navbar__title">
         <h1>Ryze</h1>
       </Link>
-      <form className="navbar__search-form" onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          className="navbar__search-input"
-        />
-        <button type="submit" className="navbar__search-button">
-          <SearchIcon />
-        </button>
-      </form>
+      <SearchBar className="navbar__search-form" />
       <div className="navbar__user-container">
-        <div
-          className="navbar__user-dropdown"
-          onClick={() => setShowMenu(!showMenu)}
-        >
-          <div
-            className="navbar__user-icon"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            <PermIdentityIcon />
+        {user ? (
+          <div>
+            <div
+              className="navbar__user-dropdown"
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              <div
+                className="navbar__user-icon"
+                onClick={() => setShowMenu(!showMenu)}
+              >
+                <PermIdentityIcon />
+              </div>
+              <div
+                className="navbar__user-name"
+                onClick={() => setShowMenu(!showMenu)}
+              >
+                <h3>{userData.name}</h3>
+              </div>
+              <MenuIcon onClick={() => setShowMenu(!showMenu)} />
+            </div>
+            {showMenu ? (
+              <div className="navbar__dropdown-menu">
+                <Link
+                  to={`/profile/${userData.username}`}
+                  className="navbar__dropdown-item"
+                >
+                  View Profile
+                </Link>
+                <Link to="/" className="navbar__dropdown-item" onClick={logout}>
+                  Log out
+                </Link>
+                {/* <div lassName="navbar__dropdown-item">
+                  <button onClick={logout}>Log Out</button>{" "}
+                </div> */}
+              </div>
+            ) : null}
           </div>
-          <div
-            className="navbar__user-name"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            <h3>Kit Wiggin</h3>
+        ) : (
+          <div className="navbar__logged-out">
+            You are not currently logged in. Please{" "}
+            <Link to="/login">login</Link> or{" "}
+            <Link to="/register">register</Link> now!
           </div>
-          <MenuIcon onClick={() => setShowMenu(!showMenu)} />
-        </div>
-        {showMenu ? (
-          <div className="navbar__dropdown-menu">
-            <Link to="/" className="navbar__dropdown-item">
-              View Profile
-            </Link>
-            <Link to="/logout" className="navbar__dropdown-item">
-              Log Out
-            </Link>
-          </div>
-        ) : null}
-        {/* <MenuIcon onClick={() => setShowMenu(!showMenu)} /> */}
+        )}
       </div>
     </div>
   );

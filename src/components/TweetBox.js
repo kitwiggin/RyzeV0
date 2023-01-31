@@ -12,6 +12,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 
 function TweetBox() {
   const [tweetMessage, setTweetMessage] = useState("");
@@ -46,9 +47,6 @@ function TweetBox() {
   const fetchUserData = async () => {
     if (user) {
       try {
-        // const q = query(collection(db, "users"), where("uid", "==", user.uid));
-        // const doc = await getDocs(q);
-        // setUserData(doc.docs[0].data());
         const ref = doc(db, "users", user.uid);
         const docSnap = await getDoc(ref);
         setUserData(docSnap.data());
@@ -65,12 +63,16 @@ function TweetBox() {
     fetchUserData();
   }, [user, loading]);
 
+  // When a user logs out, their pic is still here because it loads before userData is updated...
   return (
     <div className="tweetBox">
       <form>
         <div className="tweetBox__input">
-          {userData.avatar ? <Avatar src={userData.avatar} /> : <></>}
-
+          {userData.avatar ? (
+            <Avatar src={userData.avatar} />
+          ) : (
+            <PermIdentityIcon />
+          )}
           <input
             placeholder="What's happening?"
             value={tweetMessage}

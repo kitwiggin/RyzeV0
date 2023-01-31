@@ -7,14 +7,15 @@
   
   .navbar__logo {
     height: 50px;
-    margin-left: 20px;
+    margin-left: 2px;
   }
   
   .navbar__title {
     font-size: 12px;
     font-family: Montserrat, sans-serif;
     color: black;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: auto;
     text-decoration: none;
   }
 
@@ -22,7 +23,7 @@
     display: flex;
     align-items: center;
     margin: 0 auto;
-    width: 50%;
+    /* width: 50%; */
     margin-left: auto;
     margin-right: auto;
   }
@@ -47,18 +48,21 @@
     display: flex;
     align-items: center;
     margin-left: auto;
+    margin-right: 10px;
   }
   
   .navbar__user-name {
     color: #00008B;
     text-decoration: none;
     margin-right: 10px;
+    cursor: pointer;
   }
   
   .navbar__user-icon {
     color: #00008B;
     font-size: 25px;
     text-decoration: none;
+    cursor: pointer;
   }
 
   .navbar__user-dropdown {
@@ -66,6 +70,7 @@
     align-items: center;
     position: relative;
     margin-left: auto;
+    cursor: pointer;
   }
 
   .navbar__dropdown-menu {
@@ -81,6 +86,7 @@
     border-top: none;
     border-radius: 5px;
     box-shadow: 2px 2px 2px #ccc;
+    cursor: pointer;
 }
 
 .navbar__dropdown-item {
@@ -91,6 +97,7 @@
     color: #00008B;
     text-decoration: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .navbar__dropdown-item:last-child {

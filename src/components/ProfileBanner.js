@@ -80,7 +80,7 @@ function ProfileBanner() {
       const profileDoc = await getDocs(q);
       setProfileInfo(profileDoc.docs[0].data());
 
-      if (profileDoc.docs[0].exists()) {
+      if (user && profileDoc.docs[0].exists()) {
         const followingID = user.uid + "_" + profileDoc.docs[0].data().uid;
         const ref = doc(db, "following", followingID);
         const docSnap = await getDoc(ref);
@@ -310,7 +310,7 @@ function ProfileBanner() {
           )}
         </div>
       ) : (
-        <h3>Log in to see user profile info</h3>
+        <h3>Log in to follow or subscribe</h3>
       )}
       {editing ? (
         <div className="profile_editing">
@@ -348,7 +348,6 @@ function ProfileBanner() {
       ) : (
         <></>
       )}
-      {/* {editing ? <EditProfile profileInfo={profileInfo} /> : <></>} */}
     </div>
   );
 }

@@ -147,6 +147,7 @@ function ProfileBanner() {
     } else {
       await follow(false);
     }
+    setFollowed(true);
     setSubscribed(!subscribed);
   };
 

@@ -9,10 +9,20 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import "../style/Post.css";
+import PostLike from "./PostLike";
 
 // Posts are static and don't update avatar etc. when user
 // updates their info :(
-function Post({ displayName, username, verified, text, image, avatar }) {
+function Post({
+  postID,
+  displayName,
+  username,
+  verified,
+  text,
+  image,
+  avatar,
+  likers,
+}) {
   return (
     <div className="post">
       <div className="post__avatar">
@@ -37,7 +47,8 @@ function Post({ displayName, username, verified, text, image, avatar }) {
         <div className="post__footer">
           <ChatBubbleOutline fontSize="small" />
           <Repeat fontSize="small" />
-          <FavoriteBorder fontSize="small" />
+          {/* <FavoriteBorder fontSize="small" /> */}
+          <PostLike postID={postID} likers={likers} />
           <Publish fontSize="small" />
         </div>
       </div>

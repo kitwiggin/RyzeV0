@@ -1,0 +1,13 @@
+.postlike {
+    display: inline-flex;
+    align-items: center;
+    margin-top: -8px;
+}
+
+.postlike_icon {
+    cursor: pointer;
+}
+
+.postlike_count {
+    padding: 5px;
+}
